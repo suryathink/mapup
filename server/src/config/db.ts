@@ -4,7 +4,6 @@ import log4js from "log4js";
 dotenv.config();
 mongoose.set("strictQuery", true);
 const logger = log4js.getLogger();
-
 const MONGO_URL = process.env.MONGO_URL!;
 
 async function connectDatabase() {
