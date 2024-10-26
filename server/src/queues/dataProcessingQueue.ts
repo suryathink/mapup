@@ -3,7 +3,10 @@ import Bull from "bull";
 import { processCSV } from "../utils/csvProcessor";
 
 const dataProcessingQueue = new Bull("data-processing", {
-  redis: { host: "127.0.0.1", port: 6379 },
+  redis: {
+    host: process.env.REDIS_HOST_URL!.toString(),
+    port: Number(process.env.REDIS_PORT!),
+  },
 });
 
 dataProcessingQueue.process(async (job) => {

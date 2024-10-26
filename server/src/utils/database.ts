@@ -1,15 +1,28 @@
-// src/utils/database.ts
-import mongoose from "mongoose";
 import log4js from "log4js";
-import { Data } from "../models/Data";
+import Weather from "../models/Data";
 
 const logger = log4js.getLogger();
 
 // Function to insert data in batches to avoid memory overload
 export const insertDataInBatches = async (dataBatch: any[]) => {
   try {
-    // Inserting batch of data database
-    await Data.insertMany(dataBatch, { ordered: false });
+    const bulkOps: any = [];
+
+    dataBatch.forEach((record) => {
+      if (record.time) {
+        // Only add records with a non-null 'time'
+        bulkOps.push({
+          updateOne: {
+            filter: { time: record.time },
+            update: { $set: record },
+            upsert: true, // Insert if not exists, otherwise update
+          },
+        });
+      }
+    });
+
+    await Weather.bulkWrite(bulkOps);
+    logger.log("Batch insert successful!");
   } catch (error) {
     logger.error("Error inserting batch:", error);
   }
@@ -22,5 +35,5 @@ export const getPaginatedData = async (
   limit: number
 ) => {
   const skip = (page - 1) * limit;
-  return await Data.find(filter).skip(skip).limit(limit);
+  return await Weather.find(filter).skip(skip).limit(limit);
 };
