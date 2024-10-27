@@ -5,13 +5,24 @@ const logger = log4js.getLogger("api");
 
 export function logRequests(req: Request, res: Response, next: NextFunction) {
   const { method, originalUrl, body, query, params } = req;
-  const logMessage = {
+
+  const logMessage: any = {
     method,
     url: originalUrl,
     body,
     query,
     params,
   };
+
+  const excludedRoutes = ["/login", "/signup"]; // Add your specific routes here
+
+  if (excludedRoutes.includes(req.path)) {
+    // Don't log sensitive data
+    logMessage.body = "";
+    logMessage.query = {};
+    logMessage.params = {};
+  }
+
   logger.info("Incoming request:", logMessage);
   next();
 }

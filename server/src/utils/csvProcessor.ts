@@ -8,13 +8,13 @@ const logger = log4js.getLogger();
 
 export const processCSV = async (filePath: string) => {
   const rows: any[] = []; // Temporary storage for each batch of data
-  const batchSize = 100; // Number of records to process in each batch
+  const batchSize = 50; // Number of records to process in each batch
 
   // Stream the CSV file
   fs.createReadStream(filePath)
     .pipe(csv())
     .on("data", (data) => {
-      console.log("data", JSON.stringify(data));
+      logger.log("data", JSON.stringify(data));
 
       if (data) {
         rows.push(data);

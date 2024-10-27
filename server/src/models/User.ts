@@ -1,12 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
-import bcrypt from "bcryptjs";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: string;
-  comparePassword(candidatePassword: string): Promise<boolean>;
+  role?: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -15,15 +13,9 @@ const UserSchema: Schema = new Schema({
   password: { type: String, required: true },
   role: {
     type: String,
-    enum: ["admin", "editor", "viewer"],
-    default: "viewer",
+    enum: ["admin", "manager", "user"],
+    default: "user",
   },
 });
-
-UserSchema.methods.comparePassword = async function (
-  candidatePassword: string
-) {
-  return await bcrypt.compare(candidatePassword, this.password);
-};
 
 export default mongoose.model<IUser>("User", UserSchema);
