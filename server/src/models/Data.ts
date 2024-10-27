@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface IWeather extends Document {
+export interface IWeather extends Document {
   time: string; // Unique timestamp for each reading
   temperature: string;
   latitude: string;

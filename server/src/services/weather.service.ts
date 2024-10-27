@@ -1,4 +1,11 @@
-import Weather from "../models/Data";
+import Weather, { IWeather } from "../models/Data";
+
+interface FetchOptions {
+  timezone?: string;
+  page?: number;
+  limit?: number;
+  createdAt?: "asc" | "desc";
+}
 
 export class WeatherService {
   public static async delete(id: string) {
@@ -11,5 +18,34 @@ export class WeatherService {
       { ...body },
       { new: true }
     );
+  }
+
+  public static async fetchAll(options: FetchOptions = {}) {
+    const { timezone, page = 1, limit = 10, createdAt = "desc" } = options;
+
+    const query: Record<string, any> = {};
+    if (timezone) {
+      query.timezone = { $regex: timezone, $options: "i" };
+    }
+
+    const skip = (page - 1) * limit;
+
+    const sortOrder = createdAt === "asc" ? 1 : -1;
+
+    const data = await Weather.find(query)
+      .sort({ createdAt: sortOrder }) // Sort by createdAt according to the provided direction
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const totalCount = await Weather.countDocuments(query);
+
+    return {
+      data,
+      page,
+      limit,
+      totalPages: Math.ceil(totalCount / limit),
+      totalCount,
+    };
   }
 }

@@ -17,6 +17,28 @@ export class WeatherController {
       return;
     }
   }
+
+  public static async fetchAll(req: Request, res: Response): Promise<void> {
+    try {
+      const { timezone, page = 1, limit = 20, createdAt = "desc" } = req.query;
+
+      const data = await WeatherService.fetchAll({
+        timezone: timezone as string,
+        page: Number(page) < 1 ? 1 : Number(page),
+        limit: Number(limit),
+        createdAt: createdAt as "asc" | "desc", // Specify sorting order for createdAt
+      });
+
+      res.send({ data });
+      return;
+    } catch (error) {
+      logApiError(req, error as Error);
+      res.status(500).send({
+        message: "Internal server error",
+      });
+      return;
+    }
+  }
   public static async update(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
@@ -26,6 +48,7 @@ export class WeatherController {
         res
           .status(400)
           .send({ message: "id and temperature are mandatory fields" });
+        return;
       }
 
       const data = await WeatherService.update(id, {

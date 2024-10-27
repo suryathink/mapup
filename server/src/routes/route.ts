@@ -18,6 +18,11 @@ router.post(
 router.post("/signup", UserController.create);
 router.post("/login", UserController.login);
 
+router.get(
+  "/",
+  verifyToken(["admin", "user", "manager"]),
+  WeatherController.fetchAll
+);
 router.put("/:id", verifyToken(["admin"]), WeatherController.update);
 router.delete("/:id", verifyToken(["admin"]), WeatherController.delete);
 
