@@ -1,8 +1,9 @@
-import express, { Request, RequestHandler, Response } from "express";
+import express from "express";
 import multer from "multer";
-import dataProcessingQueue from "../queues/dataProcessingQueue";
 import { UserController } from "../controller/user.controller";
+import { WeatherController } from "../controller/weather.controller";
 import verifyToken from "../middlewares/auth";
+
 const upload = multer({ dest: "uploads/" });
 
 const router = express.Router();
@@ -16,5 +17,8 @@ router.post(
 
 router.post("/signup", UserController.create);
 router.post("/login", UserController.login);
+
+router.put("/:id", verifyToken(["admin"]), WeatherController.update);
+router.delete("/:id", verifyToken(["admin"]), WeatherController.delete);
 
 export default router;

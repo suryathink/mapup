@@ -14,8 +14,7 @@ export function logRequests(req: Request, res: Response, next: NextFunction) {
     params,
   };
 
-  const excludedRoutes = ["/login", "/signup"]; // Add your specific routes here
-
+  const excludedRoutes = ["/login", "/signup"];
   if (excludedRoutes.includes(req.path)) {
     // Don't log sensitive data
     logMessage.body = "";
