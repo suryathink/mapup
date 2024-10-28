@@ -30,7 +30,8 @@ jobs:
           export DOCKER_BUILDKIT=1
           docker buildx create --use
 
-      - name: Build Docker image
+      - name: Change directory to server and Build Docker image
+        working-directory: server
         run: |
           docker buildx build -t suryathink/map:latest \
             --build-arg MONGO_URL=${{ secrets.MONGO_URL }} \
@@ -38,7 +39,7 @@ jobs:
             --build-arg REDIS_HOST_URL=${{ secrets.REDIS_HOST_URL }} \
             --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} \
             --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
-            -f server/Dockerfile .
+            -f Dockerfile .
 
       - name: Push Docker image to Docker Hub
         run: docker push suryathink/map:latest
