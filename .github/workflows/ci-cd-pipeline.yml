@@ -25,15 +25,10 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
-      - name: Enable BuildKit and Set up Buildx
-        run: |
-          export DOCKER_BUILDKIT=1
-          docker buildx create --use
-
       - name: Change directory to server and Build Docker image
         working-directory: server
         run: |
-          docker buildx build -t suryathink/map:latest \
+          docker build -t suryathink/map:latest \
             --build-arg MONGO_URL=${{ secrets.MONGO_URL }} \
             --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
             --build-arg REDIS_HOST_URL=${{ secrets.REDIS_HOST_URL }} \
@@ -67,7 +62,6 @@ jobs:
           echo "${EC2_KEY}" > ec2_key.pem
           chmod 600 ec2_key.pem
           ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
-            cd server
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
             docker pull suryathink/map:latest
             docker stop new-container || true
