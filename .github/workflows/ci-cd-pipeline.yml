@@ -30,13 +30,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
+          docker build -t suryathink/map:latest \
             --build-arg MONGO_URL=${{ secrets.MONGO_URL }} \
             --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
             --build-arg REDIS_HOST_URL=${{ secrets.REDIS_HOST_URL }} \
             --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} \
             --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
-            -t suryathink/map:latest \
             -f server/Dockerfile .
 
       - name: Push Docker image to Docker Hub
