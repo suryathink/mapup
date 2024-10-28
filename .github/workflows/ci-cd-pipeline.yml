@@ -28,12 +28,13 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-          --build-arg MONGO_URL=${{ secrets.MONGO_URL }} \
-          --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
-          --build-arg REDIS_HOST_URL=${{ secrets.REDIS_HOST_URL }} \
-          --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} \
-          --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
-          -t suryathink/map:latest -f server/Dockerfile .
+            --build-arg MONGO_URL=${{ secrets.MONGO_URL }} \
+            --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            --build-arg REDIS_HOST_URL=${{ secrets.REDIS_HOST_URL }} \
+            --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} \
+            --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+            -t suryathink/map:latest \
+            -f server/Dockerfile .
 
       - name: Push Docker image to Docker Hub
         run: docker push suryathink/map:latest
@@ -61,14 +62,15 @@ jobs:
           echo "${EC2_KEY}" > ec2_key.pem
           chmod 600 ec2_key.pem
           ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
-            docker pull your-dockerhub-username/your-repo-name:latest
-            docker stop existing-container || true
-            docker rm existing-container || true
+            docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+            docker pull suryathink/map:latest
+            docker stop new-container || true
+            docker rm new-container || true
             docker run -d -p 8000:8000 --name new-container \
               -e MONGO_URL=${MONGO_URL} \
               -e JWT_SECRET=${JWT_SECRET} \
               -e REDIS_HOST_URL=${REDIS_HOST_URL} \
               -e REDIS_PORT=${REDIS_PORT} \
               -e REDIS_PASSWORD=${REDIS_PASSWORD} \
-              your-dockerhub-username/your-repo-name:latest
+              suryathink/map:latest
           EOF
