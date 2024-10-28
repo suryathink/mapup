@@ -1,6 +1,7 @@
 import log4js from "log4js";
 import Weather from "../models/Data";
 import { WeatherService } from "../services/weather.service";
+import { notifyNameSpace } from "./notifyHelper";
 
 const logger = log4js.getLogger();
 
@@ -31,8 +32,7 @@ export const insertDataInBatches = async (dataBatch: any[]) => {
       const createdData = await WeatherService.fetchNewlyCreatedData(
         createdIds
       );
-      // todo emit this via socket
-      logger.log("createdData", JSON.stringify(createdData));
+      notifyNameSpace("data", createdData);
     }
 
     logger.log("Batch insert successful!");
