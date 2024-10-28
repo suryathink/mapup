@@ -1,5 +1,5 @@
 # Use an official Node.js image
-FROM node:18
+FROM node:18-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose the application port
-EXPOSE 3000
+EXPOSE 8000
 
 # Set environment variables if necessary
 ENV MONGO_URL=$MONGO_URL \
