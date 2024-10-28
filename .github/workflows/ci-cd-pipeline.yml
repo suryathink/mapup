@@ -26,7 +26,7 @@ jobs:
         run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
       - name: Change directory to server and Build Docker image
-        working-directory: cd server
+        working-directory: server
         run: |
           docker build -t suryathink/map:latest \
             --build-arg MONGO_URL=${{ secrets.MONGO_URL }} \
