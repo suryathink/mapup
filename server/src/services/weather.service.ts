@@ -48,4 +48,11 @@ export class WeatherService {
       totalCount,
     };
   }
+
+  // fetch on the basis of ids
+  public static async fetchNewlyCreatedData(ids: string[]) {
+    return await Weather.find({
+      _id: { $in: ids },
+    }).lean();
+  }
 }

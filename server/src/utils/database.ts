@@ -1,5 +1,6 @@
 import log4js from "log4js";
 import Weather from "../models/Data";
+import { WeatherService } from "../services/weather.service";
 
 const logger = log4js.getLogger();
 
@@ -20,8 +21,20 @@ export const insertDataInBatches = async (dataBatch: any[]) => {
         });
       }
     });
+    const result = await Weather.bulkWrite(bulkOps);
 
-    await Weather.bulkWrite(bulkOps);
+    const createdIds = result.upsertedIds
+      ? Object.values(result.upsertedIds).map((upsert) => upsert._id.toString())
+      : [];
+
+    if (createdIds && createdIds.length) {
+      const createdData = await WeatherService.fetchNewlyCreatedData(
+        createdIds
+      );
+      // todo emit this via socket
+      logger.log("createdData", JSON.stringify(createdData));
+    }
+
     logger.log("Batch insert successful!");
   } catch (error) {
     logger.error("Error inserting batch:", error);
