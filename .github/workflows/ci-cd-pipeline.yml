@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Change directory to server
+        run: cd server
+
       - name: Log in to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -62,6 +65,7 @@ jobs:
           echo "${EC2_KEY}" > ec2_key.pem
           chmod 600 ec2_key.pem
           ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
+            cd server
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
             docker pull suryathink/map:latest
             docker stop new-container || true
