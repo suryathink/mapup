@@ -14,8 +14,6 @@ export const processCSV = async (filePath: string) => {
   fs.createReadStream(filePath)
     .pipe(csv())
     .on("data", (data) => {
-      logger.log("data", JSON.stringify(data));
-
       if (data) {
         rows.push(data);
       }
