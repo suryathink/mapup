@@ -18,7 +18,7 @@ ENV MONGO_URL=${MONGO_URL} \
 COPY package*.json ./
 RUN ls && node -v
 # RUN npm install && npm install --save-dev @types/cors
-RUN yarn
+RUN npm i
 COPY . .
 RUN npm run build
 EXPOSE 8000
