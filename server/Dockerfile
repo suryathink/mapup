@@ -16,7 +16,8 @@ ENV MONGO_URL=${MONGO_URL} \
     REDIS_PASSWORD=${REDIS_PASSWORD}
 
 COPY package*.json ./
-RUN npm install && npm install --save-dev @types/cors
+# RUN npm install && npm install --save-dev @types/cors
+RUN npm install
 COPY . .
 RUN npm run build
 EXPOSE 8000
