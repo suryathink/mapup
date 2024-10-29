@@ -27,8 +27,7 @@ jobs:
 
       - name: Change directory to server and Build Docker image
         working-directory: server
-        run: |
-          docker build -t suryathink/map:latest . --build-arg MONGO_URL=${{ secrets.MONGO_URL }}  --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} --build-arg REDIS_HOST_URL=${{ secrets.REDIS_HOST_URL }} --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
+        run: docker build -t suryathink/map:latest . --build-arg MONGO_URL=${{ secrets.MONGO_URL }} --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} --build-arg REDIS_HOST_URL=${{ secrets.REDIS_HOST_URL }} --build-arg REDIS_PORT=${{ secrets.REDIS_PORT }} --build-arg REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
 
       - name: Push Docker image to Docker Hub
         run: docker push suryathink/map:latest
