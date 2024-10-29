@@ -48,11 +48,6 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_KEY: ${{ secrets.EC2_KEY }}
-          MONGO_URL: ${{ secrets.MONGO_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          REDIS_HOST_URL: ${{ secrets.REDIS_HOST_URL }}
-          REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: |
           # Save PEM key with line breaks and set permissions
           echo "${EC2_KEY}" | sed 's/\\n/\
@@ -69,10 +64,6 @@ jobs:
             docker stop new-container || true
             docker rm new-container || true
             docker run -d -p 8000:8000 --name new-container \
-              -e MONGO_URL=${MONGO_URL} \
-              -e JWT_SECRET=${JWT_SECRET} \
-              -e REDIS_HOST_URL=${REDIS_HOST_URL} \
-              -e REDIS_PORT=${REDIS_PORT} \
-              -e REDIS_PASSWORD=${REDIS_PASSWORD} \
+              --env-file /home/ubuntu/.env \
               suryathink/map:latest
           EOF
