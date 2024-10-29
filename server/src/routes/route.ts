@@ -29,6 +29,8 @@ router.get(
   verifyToken(["admin", "user", "manager"]),
   WeatherController.fetchAll
 );
+
+router.get("/hello", apiLimiterMiddleware, UserController.hello);
 router.put(
   "/:id",
   apiLimiterMiddleware,

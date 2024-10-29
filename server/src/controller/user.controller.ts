@@ -46,6 +46,19 @@ export class UserController {
       return;
     }
   }
+
+  public static async hello(req: Request, res: Response): Promise<void> {
+    try {
+      res.send("Server up and running");
+      return;
+    } catch (error) {
+      logApiError(req, error as Error);
+      res.status(500).send({
+        message: "internal server error",
+      });
+      return;
+    }
+  }
   public static async login(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
