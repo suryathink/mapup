@@ -16,7 +16,7 @@ ENV MONGO_URL=${MONGO_URL} \
     REDIS_PASSWORD=${REDIS_PASSWORD}
 
 COPY package*.json ./
-RUN ls
+RUN ls && node -v
 # RUN npm install && npm install --save-dev @types/cors
 RUN npm install
 COPY . .
