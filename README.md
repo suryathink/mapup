@@ -118,4 +118,10 @@ The backend service exposes the following RESTful API routes for user management
 - **Delete Weather Data (`/:id`)**: Admin-only route for deleting a specific weather data record by ID.
 
 ---
+### Note
 
+ Due to less time I was not able to build the frontend part
+---
+
+Sample data you can try uploading
+[weather_data.csv](https://github.com/user-attachments/files/17591982/weather_data.csv)
