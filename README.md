@@ -23,9 +23,10 @@ This backend service processes and analyzes historical weather data using a scal
 
 ## Installation and Setup
 
-### Prerequisites
+### TechStack
 
 - Node.js v18+
+- Express
 - MongoDB
 - Docker
 - AWS EC2 (for deployment)
@@ -36,7 +37,7 @@ This backend service processes and analyzes historical weather data using a scal
 1. **Clone the Repository**:
     ```bash
     git clone https://github.com/suryathink/mapup
-    cd https://github.com/suryathink/mapup
+    cd <repository-directory>
     cd server  # Move into the backend code folder
     ```
 
@@ -89,10 +90,8 @@ This service processes weather data received in CSV format, specifically OpenWea
 Socket.IO is used to stream data in real-time, allowing clients to receive updates without polling the server.
 
 
-Here's an expanded README section listing all the routes and their functions:
 
 ---
-
 ## API Endpoints
 
 The backend service exposes the following RESTful API routes for user management, weather data processing, and real-time data streaming:
